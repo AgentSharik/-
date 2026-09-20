@@ -64,7 +64,7 @@ def street():
     # фонари
     for z in (4,12,20):
         w.fill(12,12,1,4,z,z,METAL); w.fill(12,12,5,5,z,z,LAMP)
-    w.calc_light(sky_top=True,sky_level=6)   # сумерки
+    w.calc_light(sky_top=True,sky_level=9)   # сумерки
     return w
 
 def square_fire():
@@ -86,5 +86,34 @@ def desk_room():
     w.fill(4,5,2,2,5,5,PAPER)                      # бумаги
     w.fill(2,2,2,3,5,5,LAMP)                       # настольная лампа
     w.fill(0,2,2,4,0,0,GLASS)                      # окно
+    w.calc_light(sky_top=False)
+    return w
+
+def animal_room():
+    w=World(16,6,12)
+    w.fill(0,15,0,0,0,11,CONCD)
+    w.fill(0,15,5,5,0,11,CONCD)
+    w.fill(0,0,1,4,0,11,METAL); w.fill(15,15,1,4,0,11,METAL)
+    w.fill(6,9,5,5,2,9,LAMP)
+    for z in (2,5,8):                       # клетки слева и справа
+        w.fill(2,5,1,2,z,z+1,CRATE)
+        w.fill(2,5,3,3,z,z+1,GLASS)
+        w.fill(10,13,1,2,z,z+1,CRATE)
+        w.fill(10,13,3,3,z,z+1,GLASS)
+        w.fill(3,3,2,2,z,z,SCREEN)          # глаза в клетке
+        w.fill(11,11,2,2,z+1,z+1,SCREEN)
+    w.fill(7,8,1,4,11,11,METAL)
+    w.calc_light(sky_top=False)
+    return w
+
+def meeting_room():
+    w=World(14,6,10)
+    w.fill(0,13,0,0,0,9,WOOD)
+    w.fill(0,13,5,5,0,9,CONCD)
+    w.fill(0,0,1,4,0,9,BRICK); w.fill(13,13,1,4,0,9,BRICK); w.fill(0,13,1,4,9,9,BRICK)
+    w.fill(3,10,1,1,4,5,TABLE)              # длинный стол
+    w.fill(4,9,2,2,4,5,PAPER)
+    w.fill(5,8,5,5,4,5,LAMP)
+    w.fill(0,2,2,4,0,0,GLASS)
     w.calc_light(sky_top=False)
     return w
