@@ -1,0 +1,204 @@
+1
+00:00:12,150 --> 00:00:15,703
+Observation log. Entry forty-two.
+
+2
+00:00:15,703 --> 00:00:19,255
+I think... we've finally done it.
+
+3
+00:00:19,255 --> 00:00:25,607
+Humanity no longer has to spend a third of its life asleep.
+
+4
+00:00:25,607 --> 00:00:30,344
+A third of life — in darkness, in emptiness.
+
+5
+00:00:30,344 --> 00:00:33,035
+Formula Z-zero-one works.
+
+6
+00:00:33,035 --> 00:00:34,650
+It has to work.
+
+7
+00:01:16,150 --> 00:01:17,883
+A week has passed.
+
+8
+00:01:17,883 --> 00:01:22,406
+Subject number one has not slept for 168 hours.
+
+9
+00:01:22,406 --> 00:01:26,353
+Productivity is up three hundred percent.
+
+10
+00:01:26,353 --> 00:01:32,224
+Food intake is down threefold — he barely touches the steaks.
+
+11
+00:01:32,224 --> 00:01:35,304
+Physical strength... incredible.
+
+12
+00:01:35,304 --> 00:01:39,539
+Today he broke obsidian with his bare hands.
+
+13
+00:01:39,539 --> 00:01:42,426
+Faster than a diamond pickaxe.
+
+14
+00:01:42,426 --> 00:01:46,950
+I don't understand where the energy comes from.
+
+15
+00:02:31,150 --> 00:02:32,698
+Entry... fifty.
+
+16
+00:02:32,698 --> 00:02:34,866
+Something went wrong.
+
+17
+00:02:34,866 --> 00:02:44,671
+Cell regeneration is out of control — tissue rebuilds faster than it breaks down, but... wrong.
+
+18
+00:02:44,671 --> 00:02:49,522
+The brain no longer registers higher functions.
+
+19
+00:02:49,522 --> 00:02:52,722
+He doesn't respond to commands.
+
+20
+00:02:52,722 --> 00:02:55,715
+He doesn't react to his name.
+
+21
+00:02:55,715 --> 00:02:58,915
+He doesn't eat what I give him.
+
+22
+00:02:58,915 --> 00:03:01,186
+He just... watches me.
+
+23
+00:03:01,186 --> 00:03:03,250
+For three hours now.
+
+24
+00:03:45,600 --> 00:03:47,542
+Guards! GUARDS!
+
+25
+00:03:47,542 --> 00:03:53,627
+Activate the isolation protocol! Seal Sector B!
+
+26
+00:03:53,627 --> 00:03:55,828
+It... it got out!
+
+27
+00:03:55,828 --> 00:03:56,735
+No! NO!
+
+28
+00:03:56,735 --> 00:03:57,900
+[screams]
+
+29
+00:04:16,100 --> 00:04:22,400
+Attention. Isolation protocol.
+
+30
+00:04:22,400 --> 00:04:25,600
+Breach in Sector B.
+
+31
+00:04:25,600 --> 00:04:28,800
+Attention. Breach in Sector B.
+
+32
+00:04:41,100 --> 00:04:44,381
+We wanted to defeat sleep...
+
+33
+00:04:44,381 --> 00:04:48,600
+...but instead, a nightmare woke up.
+
+34
+00:05:00,500 --> 00:05:07,500
+Observation diary — entry 50. Project INSOMNIA / Formula Z-01. Sector B, Lab 3.
+
+35
+00:05:07,500 --> 00:05:12,000
+If you are reading this — I didn't make it in time.
+
+36
+00:05:12,000 --> 00:05:20,000
+Subject No.1 has not slept for 21 days. I was wrong. Sleep is not lost time. Sleep is when the body repairs what the day broke. I switched the repair off. And the body found another way.
+
+37
+00:05:20,000 --> 00:05:27,000
+It regenerates. Always. But each time — a little worse. A little greener. A little less human.
+
+38
+00:05:27,000 --> 00:05:34,000
+He no longer recognizes me. Yesterday I saw him looking at the guard by the door. The way I look at dinner.
+
+39
+00:05:34,000 --> 00:05:40,000
+The formula spreads through a bite — the rat blood test confirmed it. Destroy all 49 previous entries. Destroy the samples.
+
+40
+00:05:40,000 --> 00:05:45,000
+Destroy ME if you find me — I took half a dose three days ago. He feels nothing. He is just very, very tired. — Dr. E.
+
+41
+00:05:49,000 --> 00:06:07,000
+DAY 1 // EVACUATION OF SECTOR B
+
+42
+00:05:51,000 --> 00:06:04,000
+[distorted emergency radio broadcast]
+
+43
+00:06:07,000 --> 00:06:25,000
+DAY 2 // QUARANTINE CHECKPOINT
+
+44
+00:06:25,000 --> 00:06:41,000
+DAY 3 // THE CITY IS EMPTYING
+
+45
+00:06:41,000 --> 00:06:57,000
+DAY 5 // FIRST BONFIRES
+
+46
+00:06:57,000 --> 00:07:15,000
+DAY 7 // THEY WALK AMONG US
+
+47
+00:07:18,000 --> 00:07:36,000
+PERSONNEL ARCHIVE // FATES: infected, at large, eaten, terminated, evacuated, unknown
+
+48
+00:08:12,000 --> 00:08:18,000
+Sector B: destroyed under Protocol 9. City N: quarantine lifted on day 14. Early.
+
+49
+00:08:18,000 --> 00:08:24,000
+Confirmed infected: 4,217. Trend: rising. Formula Z-01: stable. Incubation: up to 72 hours.
+
+50
+00:08:24,000 --> 00:08:30,000
+Commission verdict: SUBJECT NOT CONTAINED. The project continues. Without us.
+
+51
+00:08:30,000 --> 00:08:42,000
+A THIRD OF LIFE — a horror based on the files of Sector B
+
