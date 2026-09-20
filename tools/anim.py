@@ -69,7 +69,7 @@ PAL={
  "civil":  dict(head=(205,170,140),torso=(120,110,100),legs=(55,55,65),arms=(120,110,100),hair=(50,40,30)),
 }
 
-def puppet(kind,x,z,yaw=0.0,phase=0.0,speed=0.0,head_yaw=0.0,head_pitch=0.0,
+def puppet(kind,x,z,y=0.0,yaw=0.0,phase=0.0,speed=0.0,head_yaw=0.0,head_pitch=0.0,
            arm_l=None,arm_r=None,bob_extra=0.0,glow=0.0,lean=0.0):
     P=PAL[kind]; B=[]; t=phase
     amp=min(abs(speed)/1.3,1.0)*0.55
@@ -101,7 +101,9 @@ def puppet(kind,x,z,yaw=0.0,phase=0.0,speed=0.0,head_yaw=0.0,head_pitch=0.0,
     if glow>0:
         add(np.array([-0.11,hip+1.00,0.235],np.float32)@R.T,(0.08,0.06,0.05),R@hr,(230,255,225),glow)
         add(np.array([ 0.11,hip+1.00,0.235],np.float32)@R.T,(0.08,0.06,0.05),R@hr,(230,255,225),glow)
-    root=np.array([x,0,z],np.float32)
+    mc=(35,30,30) if glow==0 else (60,80,55)
+    add(np.array([0,hip+0.86,0.235],np.float32)@R.T,(0.14,0.05,0.05),R@hr,mc)
+    root=np.array([x,y,z],np.float32)
     for b in B: b["c"]=b["c"]+root
     return B
 
