@@ -45,16 +45,20 @@ def setup():
         G[k]=rd(f"{ROOT}/audio/{k}.wav")
     for k,n in (("pre","v2_pre"),("eth","v2_ethics")):
         G[k]=mp3wav(n); G["d_"+k]=len(G[k])/44100
-    t=R3.G["TE"]+1.0
-    G["SPRE"]=t; t+=G["d_pre"]+1.5
-    G["S3"]=t; t+=G["d_p3a"]+1
-    G["S4"]=t; t+=G["d_p3b"]+1.5
-    G["SETH"]=t; t+=G["d_eth"]+1.5
-    G["S5"]=t; t+=G["d_p4"]+1
-    G["S6"]=t; t+=G["d_note"]+1
-    G["S7"]=t; t+=G["d_days"]+1
-    G["S8"]=t; t+=G["d_doss"]+1
-    G["S9"]=t; t+=G["d_fin"]+8
+    G["year"]=mp3wav("v2_year"); G["d_year"]=len(G["year"])/44100
+    G["year2"]=mp3wav("v2_last"); G["d_year2"]=len(G["year2"])/44100
+    G["LEAD"]=5.0; L=G["LEAD"]
+    t=R3.G["TE"]+2
+    G["SPRE"]=t; t+=L+G["d_pre"]+2
+    G["S3"]=t; t+=L+G["d_p3a"]+2
+    G["S4"]=t; t+=L+G["d_p3b"]+2
+    G["SETH"]=t; t+=L+G["d_eth"]+2
+    G["S5"]=t; t+=L+G["d_p4"]+2
+    G["S6"]=t; t+=L+G["d_note"]+2
+    G["S7"]=t; t+=L+G["d_days"]+3
+    G["S8"]=t; t+=L+G["d_doss"]+2
+    G["S9"]=t; t+=L+G["d_fin"]+3
+    G["S10"]=t; t+=L+G["d_year"]+1+G["d_year2"]+14
     G["TEF"]=t
     G["corr"]=scenes3.corridor(); G["corr_f"]=vox.world_faces(G["corr"])
     G["street"]=scenes3.street(); G["street_f"]=vox.world_faces(G["street"])
@@ -70,27 +74,29 @@ def lit(w,boxes): return R3.lit(w,boxes)
 def draw_full(t):
     if t<R3.G["TE"]: return R3.draw(t)
     # ---------- вставка: 49 записей, клетки ----------
-    if t<G["SPRE"]+G["d_pre"]+0.001 and t<G["S3"]:
-        u=(t-G["SPRE"])/G["d_pre"]; w=G["anim_"]; faces=G["anim_f"]; cam=anim.Cam()
+    if t<G["S3"]:
+        u=(t-G["SPRE"]-G["LEAD"])/G["d_pre"]; w=G["anim_"]; faces=G["anim_f"]; cam=anim.Cam()
         v=u
-        cam.set((8+0.2*math.sin(t*0.4),1.7,1.5+6*v),yaw=0.04*math.sin(t*0.3),pitch=-0.05)
+        cam.set((8+0.2*math.sin(t*0.4),2.0,0.4+6*v),yaw=0.04*math.sin(t*0.3),pitch=-0.08)
         boxes=lit(w,anim.puppet("doctor",8.0,3.5+6*v,y=1.0,yaw=0.1,phase=t*7,speed=1.1,head_yaw=0.5*math.sin(t*0.7)))
         im=render_scene(cam,faces,boxes,sky=(8,12,16),fog=(7,10,13),fogd=0.03)
         return np.array(im.convert("RGB"),np.float32)
     # ---------- вставка: комитет ----------
     if t>=G["SETH"] and t<G["S5"]:
-        u=(t-G["SETH"])/G["d_eth"]; w=G["meet"]; faces=G["meet_f"]; cam=anim.Cam()
-        cam.set((6.5,1.8,1.5+1.5*u),yaw=0.0,pitch=-0.06)
+        u=(t-G["SETH"]-G["LEAD"])/G["d_eth"]; w=G["meet"]; faces=G["meet_f"]; cam=anim.Cam()
+        cam.set((1.4+0.9*u,2.35,5.0),yaw=math.pi/2,pitch=-0.13)
         boxes=[]
-        for i,px in enumerate((4.5,6.5,8.5)):
-            boxes+=lit(w,anim.puppet("sci" if i%2 else "civil",px,3.2,y=0.75,yaw=math.pi*0.5,lean=0.2,head_pitch=0.15+0.05*math.sin(t+i)))
-            boxes+=lit(w,anim.puppet("civil",px,6.8,y=0.75,yaw=-math.pi*0.5,lean=0.2,head_pitch=0.12+0.05*math.sin(t*0.8+i*2)))
+        for i,px in enumerate((4.0,6.0,8.0)):
+            boxes.append(dict(c=np.array([px,0.8,2.6],np.float32),s=np.array([0.7,0.6,0.7],np.float32),R=np.eye(3,dtype=np.float32),col=np.array([90,70,45],np.float32),e=0.0))
+            boxes.append(dict(c=np.array([px,0.8,7.4],np.float32),s=np.array([0.7,0.6,0.7],np.float32),R=np.eye(3,dtype=np.float32),col=np.array([90,70,45],np.float32),e=0.0))
+            boxes+=lit(w,anim.puppet("sci" if i%2 else "civil",px,3.1,y=0.85,yaw=0.0,lean=0.15,head_pitch=0.15+0.05*math.sin(t+i)))
+            boxes+=lit(w,anim.puppet("civil",px,6.9,y=0.85,yaw=math.pi,lean=0.15,head_pitch=0.12+0.05*math.sin(t*0.8+i*2)))
         boxes+=lit(w,anim.puppet("doctor",11.5,5.0,y=1.0,yaw=-math.pi*0.5,arm_r=-0.7+0.2*math.sin(t*1.5)))
         im=render_scene(cam,faces,boxes,sky=(8,10,14),fog=(6,8,11),fogd=0.03)
         return np.array(im.convert("RGB"),np.float32)
     # ---------- S3 регенерация ----------
     if t<G["S4"]:
-        u=(t-G["S3"])/G["d_p3a"]; w=G["hall"]; faces=G["hall_f"]; cam=anim.Cam(); boxes=[]
+        u=(t-G["S3"]-G["LEAD"])/G["d_p3a"]; w=G["hall"]; faces=G["hall_f"]; cam=anim.Cam(); boxes=[]
         if u<0.35:   # надрез: крупно рука/предплечье
             v=u/0.35
             cam.set((13.9,1.5,8.2),yaw=-0.5,pitch=0.05)
@@ -114,7 +120,7 @@ def draw_full(t):
         return np.array(im.convert("RGB"),np.float32)
     # ---------- S4 деградация ----------
     if t<G["S5"]:
-        u=(t-G["S4"])/G["d_p3b"]; cam=anim.Cam(); boxes=[]
+        u=(t-G["S4"]-G["LEAD"])/G["d_p3b"]; cam=anim.Cam(); boxes=[]
         if u<0.4:    # коридор: заражённый идёт навстречу, шатаясь
             v=u/0.4
             w=G["corr"]; faces=G["corr_f"]
@@ -146,7 +152,7 @@ def draw_full(t):
         return a
     # ---------- S5 прорыв ----------
     if t<G["S6"]:
-        u=(t-G["S5"])/G["d_p4"]; cam=anim.Cam(); boxes=[]
+        u=(t-G["S5"]-G["LEAD"])/G["d_p4"]; cam=anim.Cam(); boxes=[]
         if u<0.35:   # камера: субъект дрожит, глаза пульсируют
             v=u/0.35
             w=G["cell"]; faces=G["cell_f"]
@@ -184,7 +190,7 @@ def draw_full(t):
         return a
     # ---------- S6 записка (вставка-документ) ----------
     if t<G["S7"]:
-        u=(t-G["S6"])/G["d_note"]
+        u=(t-G["S6"]-G["LEAD"])/G["d_note"]
         base=np.full((H,W,3),24,np.float32)
         im=Image.fromarray(base.astype(np.uint8)).convert("RGBA")
         pg=Image.new("RGBA",(1200,1600),(232,228,214,255))
@@ -203,7 +209,7 @@ def draw_full(t):
         return a*np.clip(1-0.45*np.abs(np.mgrid[0:H][:,None]/H-0.5)*1.6,0.55,1)[...,None]
     # ---------- S7 первые дни ----------
     if t<G["S8"]:
-        u=(t-G["S7"])/G["d_days"]; cam=anim.Cam(); boxes=[]
+        u=(t-G["S7"]-G["LEAD"])/G["d_days"]; cam=anim.Cam(); boxes=[]
         if u<0.5:
             v=u/0.5
             w=G["street"]; faces=G["street_f"]
@@ -234,7 +240,7 @@ def draw_full(t):
         return np.array(im.convert("RGB"),np.float32)
     # ---------- S8 досье ----------
     if t<G["S9"]:
-        u=(t-G["S8"])/G["d_doss"]
+        u=(t-G["S8"]-G["LEAD"])/G["d_doss"]
         w=G["desk"]; faces=G["desk_f"]; cam=anim.Cam()
         cam.set((5+0.3*math.sin(t*0.1),1.9,1.6),yaw=0.15*math.sin(t*0.07),pitch=-0.5)
         im=render_scene(cam,faces,[],sky=(8,10,14),fog=(6,8,10),fogd=0.03)
@@ -252,8 +258,25 @@ def draw_full(t):
         canv.alpha_composite(pg,(x,y))
         a=Image.alpha_composite(Image.fromarray(a.astype(np.uint8)).convert("RGBA"),canv)
         return np.array(a.convert("RGB"),np.float32)
+    # ---------- S10 год спустя ----------
+    if t>=G["S10"]:
+        u=(t-G["S10"]-G["LEAD"])/max(0.1,(G["d_year"]+G["d_year2"]+15))
+        w=G["street"]; faces=G["street_f"]; cam=anim.Cam()
+        v=min(max(u,0),1)
+        cam.set((15.5,1.7,2.5+7*v),yaw=0.02*math.sin(t*0.15),pitch=-0.02)
+        boxes=[]
+        nb=int(6*min(max(u,0),1))
+        for i in range(nb):
+            boxes.append(dict(c=np.array([13.0+(i%2)*1.0,1.5+(i//2)*1.0,16.0],np.float32),
+                              s=np.array([0.95,0.95,0.95],np.float32),R=np.eye(3,dtype=np.float32),
+                              col=np.array([190,195,200],np.float32),e=0.0))
+        boxes+=lit(w,anim.puppet("subject",14.6,16.0,y=1.0,yaw=math.pi*0.5,arm_r=-1.2+0.5*math.sin(t*2.0),glow=0.6))
+        im=render_scene(cam,faces,boxes,sky=(90,70,55),fog=(50,42,38),fogd=0.02)
+        a=np.array(im.convert("RGB"),np.float32)
+        if u>1.0: a*=max(0.0,1-(u-1.0)/0.35)
+        return a
     # ---------- S9 финал ----------
-    u=(t-G["S9"])/max(0.1,(G["TEF"]-G["S9"]))
+    u=(t-G["S9"]-G["LEAD"])/max(0.1,(G["S10"]-G["S9"]-G["LEAD"]))
     if u<0.55:
         v=u/0.55
         w=G["street"]; faces=G["street_f"]; cam=anim.Cam()
@@ -281,14 +304,16 @@ def overlay_full(t,arr):
     im=Image.fromarray(np.clip(arr,0,255).astype(np.uint8)).convert("RGBA")
     ov=Image.new("RGBA",(W,H),(0,0,0,0)); d=ImageDraw.Draw(ov)
     sub=None; win=None
-    for (t0,t1,S) in ((G["SPRE"],G["S3"],fracs(["До формулы было сорок девять записей.","Мыши не спали месяц и строили гнёзда, как инженеры.","Обезьяна трое суток смотрела в зеркало, а потом улыбнулась.","Нам следовало остановиться тогда."])),
+    for (t0,t1,S) in ((G["S10"],G["TEF"],fracs(["Год спустя город молчит.","Разведывательный дрон зафиксировал движение в секторе Б: кто-то аккуратно складывает блоки.","Структуры точные, как чертёж.","Город перестраивает тот, кому больше не нужен сон.","Я остаюсь в наблюдательной последней.","Мои часы говорят, что я не сплю двенадцать дней.","Но мне не страшно.","Мне просто интересно досмотреть, что он построит."])),
+                      (G["SPRE"],G["S3"],fracs(["До формулы было сорок девять записей.","Мыши не спали месяц и строили гнёзда, как инженеры.","Обезьяна трое суток смотрела в зеркало, а потом улыбнулась.","Нам следовало остановиться тогда."])),
                       (G["SETH"],G["S5"],fracs(["Комитет по этике одобрил формулу закрытым голосованием.","В комитете было семеро.","К четырнадцатому дню пятеро из них не спали.","Протокол подписывали те, кто больше не мог уснуть."])),
                       (G["S3"],G["S4"],SUB3),(G["S4"],G["S5"],SUB4),(G["S5"],G["S6"],SUB5),
                       (G["S6"],G["S7"],SUB6),(G["S7"],G["S8"],SUB7),(G["S8"],G["S9"],SUB8),(G["S9"],G["TEF"],SUB9)):
         if t0<=t<t1:
-            u=(t-t0)/(t1-t0)
+            u=(t-t0-G["LEAD"])/(t1-t0)
             for a0,b0,s in S:
                 if a0<=u<b0: sub=s; break
+            break
     if sub:
         f=ImageFont.truetype(FONT_B,40)
         d.text((152,H-BAR-90),sub,font=f,fill=(0,0,0,200))
@@ -319,9 +344,10 @@ def main():
     def add(sig,t0,g=1.0):
         s=int(t0*44100); e=min(len(mix),s+len(sig)); mix[s:e]+=sig[:e-s]*g
     add(R3.sfx(),0); add(G["p1"],G["T0"]); add(G["p2"],G["T1"])
-    add(G["pre"],G["SPRE"]); add(G["p3a"],G["S3"]); add(G["p3b"],G["S4"]); add(G["eth"],G["SETH"]); add(G["p4"],G["S5"]); add(G["note"],G["S6"])
-    add(G["days"],G["S7"]); add(G["doss"],G["S8"]); add(G["fin"],G["S9"])
-    add(G["_w_system"],G["S5"],0.7); add(G["_w_radio"],G["S7"],0.5); add(G["_w_epilog"],G["S9"]+G["d_fin"]*0.5,0.8)
+    Ld=G["LEAD"]
+    add(G["pre"],G["SPRE"]+Ld); add(G["p3a"],G["S3"]+Ld); add(G["p3b"],G["S4"]+Ld); add(G["eth"],G["SETH"]+Ld); add(G["p4"],G["S5"]+Ld); add(G["note"],G["S6"]+Ld)
+    add(G["days"],G["S7"]+Ld); add(G["doss"],G["S8"]+Ld); add(G["fin"],G["S9"]+Ld); add(G["year"],G["S10"]+Ld); add(G["year2"],G["S10"]+Ld+G["d_year"]+1)
+    add(G["_w_system"],G["S5"],0.7); add(G["_w_radio"],G["S7"],0.5); add(G["_w_epilog"],G["S10"]+2,0.8)
     mix=np.tanh(mix*1.3)/np.tanh(1.3)*0.9
     with wave.open(f"{ROOT}/audio/_v3full_mix.wav","wb") as w:
         w.setnchannels(1); w.setsampwidth(2); w.setframerate(44100)

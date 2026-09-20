@@ -112,7 +112,7 @@ def meeting_room():
     w.fill(0,13,5,5,0,9,CONCD)
     w.fill(0,0,1,4,0,9,BRICK); w.fill(13,13,1,4,0,9,BRICK); w.fill(0,13,1,4,9,9,BRICK)
     w.fill(3,10,1,1,4,5,TABLE)              # длинный стол
-    w.fill(4,9,2,2,4,5,PAPER)
+    w.fill(5,6,2,2,4,4,PAPER); w.fill(7,8,2,2,5,5,PAPER)
     w.fill(5,8,5,5,4,5,LAMP)
     w.fill(0,2,2,4,0,0,GLASS)
     w.calc_light(sky_top=False)
