@@ -139,6 +139,7 @@ class Cam:
 
 def render(cam,boxes,light=(0.4,0.85,0.5),fogc=(14,20,19),fogd=0.03,amb=0.45,sky=(16,24,23)):
     mk_textures()
+    boxes=sorted(boxes,key=lambda b:0 if b["a"]>=1 else 1)
     H,W=cam.H,cam.W
     fb=np.tile(np.array(sky,np.float32),(H,W,1))
     zb=np.zeros((H,W),np.float32)
