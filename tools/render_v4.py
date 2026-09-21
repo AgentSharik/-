@@ -87,7 +87,7 @@ def draw(t):
     if t<9.0:
         cam.set((0,1.6,2),yaw=0,pitch=0)
         B=[]
-        base,_=mc4.render(cam,[],sky=(0,0,0))
+        base,_=mc3.render(cam,[],sky=(0,0,0))
         return base,t
     if t<G["T1"]:
         u=(t-G["T0"])/G["d1"]
@@ -145,7 +145,7 @@ def draw(t):
     dof = 0.22 if foc<3 else 0.07
     rs=np.random.RandomState(int(t*2)%7+3)
     parts=[([rs.uniform(-4,4),rs.uniform(0.4,3.2),rs.uniform(0,9)],0.02,rs.uniform(50,130)) for _ in range(30)]
-    base,_=mc4.render(cam,B,shadows=True,focus=foc,dof=dof,bloom=0.35,particles=parts)
+    base,_=mc3.render(cam,B,shadows=True,focus=foc,dof=dof,bloom=0.35,particles=parts)
     if fl<1: base=(base*fl).astype(np.uint8)
     return base,t
 
