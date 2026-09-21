@@ -54,21 +54,77 @@ class PlateCam:
         a *= (1.0 - 0.32 * np.clip(r - 0.55, 0, 1) ** 1.6)[..., None]
         return Image.fromarray(np.clip(a, 0, 255).astype("uint8"))
 
+class PlateHand(Plate):
+    """Письмо: рука с пером покадрово идёт по строке (3 позовых ключа + кроссфейд 2 кадра)."""
+    def __init__(self, bases, *a, **kw):
+        super().__init__(bases[-1], *a, **kw)
+        self.bases = [Image.open(b).convert("RGB") for b in bases]
+        self._pose, self._switch = -1, -9
+
+    def _cur_pose(self, t):
+        cur = None
+        for (ts, li, ci, ch) in self.sched:
+            if ts <= t:
+                cur = (li, ci)
+        if cur is None:
+            return 0
+        li, ci = cur
+        p = (ci + 1) / max(1, len(self.lines[li]))
+        return 0 if p < 0.35 else (1 if p < 0.70 else 2)
+
+    def frame(self, fi):
+        t = fi / FPS
+        pose = self._cur_pose(t)
+        if pose != self._pose:
+            self._prev, self._pose, self._switch = self._pose, pose, fi
+        if self._pose < 0:
+            self._prev = pose
+        base = self.bases[pose]
+        k = fi - self._switch
+        if 0 <= k < 2 and getattr(self, "_prev", pose) != pose and self._prev >= 0:
+            base = Image.blend(self.bases[self._prev], base, (k + 1) / 3.0)
+        self.src = base
+        return super().frame(fi)
+
+
+class PlateBlink(PlateCam):
+    """Моргание покадровыми вставками (4–5 кадров) + микродыхание (зум ±0.004)."""
+    def __init__(self, bases, blinks, *a, **kw):
+        super().__init__(bases[0], *a, **kw)
+        self.bases = [Image.open(b).convert("RGB") for b in bases]
+        self.blinks = blinks
+        self.z1b = self.z1
+
+    def frame(self, fi):
+        t = fi / FPS
+        self.src = self.bases[1] if any(t0 <= t < t0 + n / FPS for t0, n in self.blinks) \
+            else self.bases[0]
+        self.z1 = self.z1b * (1 + 0.004 * math.sin(t * 1.8))
+        return super().frame(fi)
+
+
 def run(cmd):
     subprocess.run(cmd, check=True, capture_output=True)
 
 def main():
     tl = {s["id"]: s for s in json.load(open("prod/audio/timeline_v6.json"))["shots"]}
     os.makedirs("/tmp/asm", exist_ok=True)
+    DIARY = ["Я перестал спать", "три недели назад.", "Не из-за формулы.",
+             "Из-за того, что", "формула нам показала."]
+    QUAD = [(0.460, 0.535), (0.660, 0.560), (0.675, 0.700), (0.470, 0.685)]
     seq = [
         ("SH-01", None),
-        ("SH-02", None),
+        ("SH-02", PlateHand(["art_v6/SH02_hand_A.png", "art_v6/SH02_hand_B.png",
+                             "art_v6/SH02_diary_base.png"], DIARY, QUAD,
+                            tl["SH-02"]["dur"], RES, zoom=1.55, cps=8.6)),
         ("SH-03", PlateCam("art_v6/SH03_lab_wide.png", tl["SH-03"]["dur"], RES,
                            z0=1.35, z1=1.35, c0=(0.32, 0.5), c1=(0.68, 0.5))),
-        ("SH-06", PlateCam("art_v6/SH06_cot_clipboard.png", 8.0, RES,
-                           z0=1.0, z1=1.22, c0=(0.5, 0.5), c1=(0.47, 0.47))),
-        ("SH-07", PlateCam("art_v6/SH07_monitor.png", tl["SH-07"]["dur"], RES,
-                           z0=1.05, z1=1.42, c0=(0.55, 0.47), c1=(0.58, 0.45))),
+        ("SH-06", PlateBlink(["art_v6/SH06_cot_clipboard.png", "art_v6/SH06_blink.png"],
+                             [(2.2, 4), (5.0, 4), (7.0, 5)], 8.0, RES,
+                             z0=1.0, z1=1.22, c0=(0.5, 0.5), c1=(0.47, 0.47))),
+        ("SH-07", PlateBlink(["art_v6/SH07_monitor.png", "art_v6/SH07_blink.png"],
+                             [(3.8, 5), (8.4, 4)], tl["SH-07"]["dur"], RES,
+                             z0=1.05, z1=1.42, c0=(0.55, 0.47), c1=(0.58, 0.45))),
         ("SH-24", None),
     ]
     durs = [tl[s]["dur"] if o else tl[s]["dur"] for s, o in seq]
